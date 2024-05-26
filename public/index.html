@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通膨追踪器</title>
+    <link rel="stylesheet" href="styles.css">
+    <!--引入 vue3 的 cdn-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@next"></script>
+</head>
+<body>
+<h1>通膨追踪器</h1>
+<h2>物價變化</h2>
+
+
+<!--按下顯示資料的按鈕，將使用 fetch async await 抓取 http://localhost:3000/api/quotes 的 JSON ，JSON 包括
+(id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT NOT NULL, product_date DATE NOT NULL,
+price_s_small_cup REAL NOT NULL, price_l_large_cup REAL NOT NULL, product_date_one DATE NOT NULL,
+price_s_small2_cup REAL NOT NULL, price_l_large2_cup REAL NOT NULL) 等欄位，用 Table 顯示，使用 vue3-->
+<button id="show_data">收尋</button>
+<table id="data_table">
+    <thead>
+    <tr>
+        <th>商品名稱</th>
+        <th>商品日期</th>
+        <th>商品價格S</th>
+        <th>商品價格L</th>
+        <th>第二個商品日期</th>
+        <th>商品價格S</th>
+        <th>商品價格L</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    document.getElementById('show_data').addEventListener('click', async () => {
+        const res = await fetch('http://localhost:3000/api/drinks');
+        const data = await res.json();
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+        data.forEach(({ product_name, product_date, price_s_small_cup, price_l_large_cup, product_date_one, price_s_small2_cup, price_l_large2_cup }) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${product_name}</td>
+            <td>${product_date}</td>
+            <td>${price_s_small_cup}</td>
+            <td>${price_l_large_cup}</td>
+            <td>${product_date_one}</td>
+            <td>${price_s_small2_cup}</td>
+            <td>${price_l_large2_cup}</td>
+          `;
+            tbody.appendChild(tr);
+        });
+    });
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
